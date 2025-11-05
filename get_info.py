@@ -495,7 +495,7 @@ def menu_principal(dados, user):
     print("1. Visualizar MEU Currículo Completo")
     print("2. Editar MEU Currículo")
     print("3. Visualizar Outro Currículo")
-    print("4. Remover Currículo (Qualquer Um)")
+    print("4. Deletar minha Conta")
     print("5. Fazer Logout")
     print("6. Salvar e Sair")
     
@@ -509,14 +509,14 @@ def menu_principal(dados, user):
     elif opcao == "3":
         ver_curriculo_alheio(dados)
     elif opcao == "4":
-        remover_user(dados)
+        remover_user(dados, user)
+        return "logout"
     elif opcao == "5":
         return "logout"
     elif opcao == "6":
         return "sair"
     else:
         print("Opção inválida. Tente novamente.")
-    
     return None
 
 # __main__ 
