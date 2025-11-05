@@ -1,3 +1,10 @@
+# To do:
+# refazer imprimir para ficar em ordem
+# implementar traduçao do codigo para html e pdf
+# fazer ediçao de listas para editar itens individuais
+# fazer interface grafica - app de desktop e de celular
+# pdf do html com separaçao de paginas melhorada
+
 import json
 import os
 
@@ -565,4 +572,3 @@ if __name__ == "__main__":
                 usuario_logado = status
                 
     salvar_e_sair(dados)
-    
