@@ -1,3 +1,11 @@
+# To do:
+# editar idiomas para ser dicionario com nome da lingua e nivel de fluencia
+# refazer imprimir para ficar em ordem
+# implementar traduçao do codigo para html e pdf
+# refazer ediçao de listas para editar itens individuais
+# fazer interface grafica - app de desktop e de celular
+# pdf do html com separaçao de paginas melhorada
+
 import json
 import os
 
@@ -36,7 +44,7 @@ class User:
 
 def add_formacao(user):
     tipo_formacao = input("Digite o nome da sua formacao (Exemplo: 'Bacharelado em Engenharia de Computação'): ")
-    local_formacao = input("Digite o nome da instituição de sua formação (Exemplo: 'PUC Minas - Pontifícia Universidade Católica de Minas Gerais'): ")
+    local_formacao = input("Digite o nome da instituição de sua formação (Exemplo: 'PUC Minas'): ")
     concluido = input("Digite 1 se já foi concluída e 2 para previsão de conclusão: ")
     conclusao = ""
     if concluido == '1':
@@ -55,7 +63,7 @@ def experiencias_lista(user):
     lista = []
     check = 's'
     while check.lower() == 's':
-        titulo = input(f"Digite o título {len(lista)+1}° item da lista de experiencias: ")
+        titulo = input(f"Digite o título {len(lista)+1}° item da lista de experiencias profissionais: ")
         descricao = input(f"Digite a descrição de {titulo}: ")
         lista.append({titulo:descricao})
         check = input("Você quer adicionar mais itens na lista de experiências (S/N)? ")
@@ -108,7 +116,7 @@ def competencias_lista(tipo):
     return lista
 
 def add_competencias(user):
-    tipo_competencia = input("Digite o nome da categoria de competencias que voce quer adicionar: ")
+    tipo_competencia = input("Digite o nome da categoria de competencias que voce quer adicionar (Exemplo: 'Linguagens de Programação', 'Pacote Office', 'Ferramentas'): ")
     lista_ou_string = input("Digite 1 se quiser fazer uma lista ou 2 se quiser escrever uma linha descritiva: ")
     competencias = None
     if lista_ou_string == '1':
@@ -509,7 +517,7 @@ def menu_principal(dados, user):
     elif opcao == "3":
         ver_curriculo_alheio(dados)
     elif opcao == "4":
-        remover_user(dados, user)
+        remover_usuario(dados, user)
         return "logout"
     elif opcao == "5":
         return "logout"
