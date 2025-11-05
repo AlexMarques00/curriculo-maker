@@ -3,7 +3,9 @@
 # implementar traduçao do codigo para html e pdf
 # fazer ediçao de listas para editar itens individuais
 # fazer interface grafica - app de desktop e de celular
-# pdf do html com separaçao de paginas melhorada
+# pdf do html com separaçao de paginas 
+# fazer programa conferir email, linkedin, github, data de formacao, celular, estado e disponibilidade
+# deixar o usuario escolher mais de 1 horario de disponibilidade (ou adicionar comentario na pergunta)
 
 import json
 import os
