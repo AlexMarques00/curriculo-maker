@@ -18,7 +18,7 @@ class User:
         self.experiencias = []
         self.projetos = []
         self.certificacoes = []
-        self.idiomas = {} # ALTERADO: Agora é um dicionário para fluência
+        self.idiomas = {}
         self.disponibilidade = ""
         self.informacoes_adicionais = ""
 
@@ -27,7 +27,6 @@ class User:
     
     @classmethod
     def from_dict(cls, data):
-        # Cria uma nova instância de User a partir de um dicionário (vindo do JSON)
         user = cls(data.get('nome', 'Desconhecido'))
         user.__dict__.update(data)
         return user
@@ -39,7 +38,6 @@ def add_formacao(user):
     tipo_formacao = input("Digite o nome da sua formacao (Exemplo: 'Bacharelado em Engenharia de Computação'): ")
     local_formacao = input("Digite o nome da instituição de sua formação (Exemplo: 'PUC Minas'): ")
     
-    # Loop de validação para 'concluido' - Repete APENAS a última pergunta em caso de erro
     while True:
         concluido = input("Digite 1 se já foi concluída e 2 para previsão de conclusão: ")
         if concluido == '1':
@@ -65,19 +63,17 @@ def lista_de_dicionarios(tipo_lista):
         descricao = input(f"Digite a descrição de {titulo}: ")
         lista.append({titulo: descricao})
         
-        # Loop de validação para 'S/N' - Repete APENAS a última pergunta em caso de erro
         while True:
             check = input(f"Você quer adicionar mais itens na lista de {tipo_lista} (S/N)? ").lower()
             if check in ['s', 'n']:
-                break # Sai do loop de validação S/N
+                break 
             print("Erro: Resposta inválida. Por favor, digite 'S' ou 'N'.")
             
         if check == 'n':
-            break # Sai do loop principal de adição de itens
+            break 
             
     return lista
 
-# Funções que chamam a lista_de_dicionarios
 def experiencias_lista(user):
     return lista_de_dicionarios("experiencias profissionais")
 
@@ -87,7 +83,6 @@ def certificacoes_lista(user):
 def projetos_lista(user):
     return lista_de_dicionarios("projetos")
 
-# Nova função para o idioma como dicionário
 def idiomas_lista_dict(user):
     """Adiciona idiomas no formato {lingua: nivel}."""
     idiomas_dict = {}
@@ -97,15 +92,14 @@ def idiomas_lista_dict(user):
         nivel = input(f"Digite o nível de fluência para {lingua} (Ex: 'Avançado', 'Fluente', 'B2'): ")
         idiomas_dict[lingua] = nivel
         
-        # Loop de validação para 'S/N' - Repete APENAS a última pergunta em caso de erro
         while True:
             check = input("Você quer adicionar mais idiomas (S/N)? ").lower()
             if check in ['s', 'n']:
-                break # Sai do loop de validação S/N
+                break 
             print("Erro: Resposta inválida. Por favor, digite 'S' ou 'N'.")
             
         if check == 'n':
-            break # Sai do loop principal
+            break 
             
     return idiomas_dict
 
@@ -115,15 +109,14 @@ def competencias_lista(tipo):
     while True:
         lista.append(input(f"Digite o {len(lista)+1}° item da lista de {tipo}: "))
         
-        # Loop de validação para 'S/N' - Repete APENAS a última pergunta em caso de erro
         while True: 
             check = input("Você quer adicionar mais itens na lista (S/N)? ").lower()
             if check in ['s', 'n']:
-                break # Sai do loop de validação S/N
+                break 
             print("Erro: Resposta inválida. Por favor, digite 'S' ou 'N'.")
             
         if check == 'n':
-            break # Sai do loop principal de adição de itens
+            break 
     return lista
 
 def add_competencias(user):
@@ -131,7 +124,6 @@ def add_competencias(user):
     tipo_competencia = input("Digite o nome da categoria de competencias que voce quer adicionar (Exemplo: 'Linguagens de Programação', 'Pacote Office', 'Ferramentas'): ")
     competencias = None
     
-    # Loop de validação para 'lista_ou_string' - Repete APENAS a última pergunta em caso de erro
     while True:
         lista_ou_string = input("Digite 1 se quiser fazer uma lista ou 2 se quiser escrever uma linha descritiva: ")
         if lista_ou_string == '1':
@@ -149,7 +141,6 @@ def add_competencias(user):
 # --- Constructor e Mostrar ---
 
 def adicionar_user(dados): # retorna user
-    # Entrada de dados pessoais
     nome = input("Digite seu nome: ")
     if nome in dados:
         print(f"Erro: Usuário {nome} já existe. Não foi possível adicionar.")
@@ -172,10 +163,10 @@ def adicionar_user(dados): # retorna user
     objetivo = input("Digite uma frase como seu objetivo profissional: ")
     dados[nome].objetivo = objetivo
     
-    # --- Adicionar Formações (Com validação S/N refinada) ---
+    # --- Adicionar Formações ---
     while True:
         if add_formacao(dados[nome]):
-            while True: # Loop de validação S/N para a pergunta se quer adicionar mais
+            while True: 
                 check = input("Quer adicionar mais formações (S/N)? ").lower()
                 if check in ['s', 'n']:
                     break
@@ -183,10 +174,10 @@ def adicionar_user(dados): # retorna user
             if check == 'n':
                 break
             
-    # --- Adicionar Competências (Com validação S/N refinada) ---
+    # --- Adicionar Competências ---
     while True:
         if add_competencias(dados[nome]):
-            while True: # Loop de validação S/N para a pergunta se quer adicionar mais
+            while True: 
                 check = input("Quer adicionar mais competências (S/N)? ").lower()
                 if check in ['s', 'n']:
                     break
@@ -197,10 +188,7 @@ def adicionar_user(dados): # retorna user
     dados[nome].experiencias = experiencias_lista(dados[nome])
     dados[nome].projetos = projetos_lista(dados[nome])
     dados[nome].certificacoes = certificacoes_lista(dados[nome])
-    
-    # Nova função de idioma (dicionário)
     dados[nome].idiomas = idiomas_lista_dict(dados[nome]) 
-    
     disponibilidade = input("Digite o horario da sua disponibilidade (manha/tarde/noite): ")
     dados[nome].disponibilidade = "Período da " + disponibilidade
     informacoes_adicionais = input("Digite um paragrafo curto sobre você se quiser (ou 'none' se não): ")
@@ -209,16 +197,12 @@ def adicionar_user(dados): # retorna user
     print(f"Usuário '{nome}' adicionado!\n")
     return dados[nome]
 
-
-# ... (Funções mostrar_nomes, carregar_dados, salvar_dados, salvar_e_sair e selecionar_usuario permanecem inalteradas, exceto se necessário) ...
-
-
-# --- Funções de Edição (Apenas os setters com listas/validações foram alterados) ---
+# --- Funções de Edição ---
 
 def editar_formacao(user):
     while True:
         if add_formacao(user):
-            while True: # Loop de validação S/N
+            while True: 
                 check = input("Quer adicionar mais formações (S/N)? ").lower()
                 if check in ['s', 'n']:
                     break
@@ -229,7 +213,7 @@ def editar_formacao(user):
 def editar_competencias(user):
     while True:
         if add_competencias(user):
-            while True: # Loop de validação S/N
+            while True: 
                 check = input("Quer adicionar mais competências (S/N)? ").lower()
                 if check in ['s', 'n']:
                     break
@@ -253,9 +237,6 @@ def editar_idiomas(user):
     # ATENÇÃO: Essa função **substitui** o dicionário inteiro de idiomas!
     user.idiomas = idiomas_lista_dict(user)
 
-
-# ... (O restante das funções de edição e o menu editar_usuario permanecem inalterados por enquanto) ...
-
 def editar_nome(user, dados):
     nome_antigo = user.nome
     novo_nome = input(f"Nome atual ({nome_antigo}). Digite o novo nome: ")
@@ -263,7 +244,6 @@ def editar_nome(user, dados):
         if novo_nome in dados:
             print("Erro: Novo nome já está em uso.")
             return
-        # Move o objeto User no dicionário
         dados[novo_nome] = dados.pop(nome_antigo)
         dados[novo_nome].nome = novo_nome
         print(f"Nome atualizado para {novo_nome}")
@@ -314,7 +294,7 @@ def editar_usuario(dados, user):
         "11": lambda: editar_experiencias(user), 
         "12": lambda: editar_projetos(user),    
         "13": lambda: editar_certificacoes(user),
-        "14": lambda: editar_idiomas(user),      # NOVO: Chamando a nova função
+        "14": lambda: editar_idiomas(user),
         "15": lambda: editar_disponibilidade(user),
         "16": lambda: editar_informacoes_adicionais(user)
     }
@@ -350,9 +330,6 @@ def editar_usuario(dados, user):
         except Exception as e:
             print(f"Ocorreu um erro durante a edição: {e}")
 
-# ... (Funções de remoção, visualização de currículo no terminal e menus) ...
-# ATENÇÃO: A função print_curriculo_terminal foi atualizada para exibir o dicionário de idiomas
-
 def print_curriculo_terminal(user):
     """Exibe os dados completos de um único usuário."""
     if not user:
@@ -370,7 +347,6 @@ def print_curriculo_terminal(user):
     
     print("\n--- Formação ---")
     if user.formacao:
-        # A ordem não foi alterada aqui (Será resolvida no item #refazer imprimir para ficar em ordem)
         for f in user.formacao:
             print(f"* {f['tipo']} em {f['onde']} ({f['conclusao']})")
     else:
@@ -378,7 +354,6 @@ def print_curriculo_terminal(user):
 
     print("\n--- Competências ---")
     if user.competencias:
-        # A ordem não foi alterada aqui (Será resolvida no item #refazer imprimir para ficar em ordem)
         for tipo, comp in user.competencias.items():
             if isinstance(comp, list):
                 print(f"  > {tipo}: {', '.join(comp)}")
@@ -403,7 +378,7 @@ def print_curriculo_terminal(user):
     exibir_lista_de_itens("Projetos", user.projetos)
     exibir_lista_de_itens("Certificações", user.certificacoes)
     
-    print("\n--- Idiomas ---") # NOVO: Exibindo idiomas como dicionário
+    print("\n--- Idiomas ---") 
     if user.idiomas:
         for lingua, nivel in user.idiomas.items():
             print(f"* {lingua}: {nivel}")
@@ -449,7 +424,6 @@ def login(dados):
         return None
 
 def logout():
-    """Limpa o status de usuário logado."""
     print("Sessão encerrada. Voltando ao menu inicial.")
     return None
 
@@ -549,31 +523,22 @@ def selecionar_usuario(dados): # retorna user
     while True: 
         try:
             nome = input("Digite o nome do usuário a ser selecionado (ou '0' para adicionar um usuário/cancelar): ").strip()
-            
             if nome == '0':
-                # Se 0, permite adicionar um novo usuário, mas a intenção principal é selecionar
                 return None 
-            
             check = 'n'
-            
             if nome not in dados:
-                 raise KeyError 
-
+                raise KeyError
             while check.lower() != 's':
                 check = input(f"Você deseja selecionar o currículo de {dados[nome].nome} (S/N)? ")
-                
                 if check.lower() == 's':
                     return dados[nome]
                 else:
                     print("Seleção cancelada. Tente novamente com outro nome.")
                     break 
-                    
         except KeyError:
             print(f"Usuário '{nome}' não existe.\n")
-            
         except (ValueError, IndexError):
             print("Entrada inválida.\n")
-
     return None
 
 # __main__ 
@@ -600,3 +565,4 @@ if __name__ == "__main__":
                 usuario_logado = status
                 
     salvar_e_sair(dados)
+    
