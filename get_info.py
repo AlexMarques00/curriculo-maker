@@ -1,44 +1,34 @@
 # To do:
 # refazer imprimir para ficar em ordem
 # implementar traduçao do codigo para html e pdf
-# fazer ediçao de listas para editar itens individuais
 # fazer interface grafica - app de desktop e de celular
 # pdf do html com separaçao de paginas 
-# fazer programa conferir email, linkedin, github, data de formacao, celular, estado e disponibilidade
-# deixar o usuario escolher mais de 1 horario de disponibilidade (ou adicionar comentario na pergunta)
 
 import json
 import os
+from pydantic import BaseModel, EmailStr, HttpUrl, ValidationError
+from typing import List, Dict, Any, Optional
+from dataclasses import field
 
 ARQUIVO_JSON = "info.json"
 
-class User:
-    def __init__(self, nome):
-        self.nome = nome
-        self.email = ""
-        self.linkedin = ""
-        self.github = ""
-        self.celular = ""
-        self.estado = ""
-        self.cidade = ""
-        self.objetivo = ""
-        self.formacao = []
-        self.competencias = {}
-        self.experiencias = []
-        self.projetos = []
-        self.certificacoes = []
-        self.idiomas = {}
-        self.disponibilidade = ""
-        self.informacoes_adicionais = ""
-
-    def to_dict(self):
-        return self.__dict__
-    
-    @classmethod
-    def from_dict(cls, data):
-        user = cls(data.get('nome', 'Desconhecido'))
-        user.__dict__.update(data)
-        return user
+class User(BaseModel):
+    nome: str
+    email: Optional[EmailStr] = ""
+    linkedin: Optional[HttpUrl] = ""
+    github: Optional[HttpUrl] = ""
+    celular: str = ""
+    estado: str = ""
+    cidade: str = ""
+    objetivo: str = ""
+    formacao: List[Dict[str, Any]] = field(default_factory=list)
+    competencias: Dict[str, Any] = field(default_factory=dict)
+    experiencias: List[Dict[str, Any]] = field(default_factory=list)
+    projetos: List[Dict[str, Any]] = field(default_factory=list)
+    certificacoes: List[Dict[str, Any]] = field(default_factory=list)
+    idiomas: Dict[str, Any] = field(default_factory=dict)
+    disponibilidade: str = ""
+    informacoes_adicionais: str = ""
 
 # --- Setters da classe User ---
 
@@ -154,27 +144,39 @@ def adicionar_user(dados): # retorna user
     if nome in dados:
         print(f"Erro: Usuário {nome} já existe. Não foi possível adicionar.")
         return None
-    dados[nome] = User(nome)
-    email = input("Digite seu email: ")
-    dados[nome].email = email
-    linkedin = input("Digite o link do seu linkedin (ou 'none' se não tiver): ")
-    if linkedin != "none":
-        dados[nome].linkedin = linkedin
-    github = input("Digite o link do seu github se houver (ou 'none' se não tiver): ")
-    if github != "none":
-        dados[nome].github = github
-    celular = input("Digite seu numero de celular: ")
-    dados[nome].celular = celular
-    estado = input("Digite a sigla do seu estado: ")
-    dados[nome].estado = estado
-    cidade = input("Digite o nome da sua cidade: ")
-    dados[nome].cidade = cidade
-    objetivo = input("Digite uma frase como seu objetivo profissional: ")
-    dados[nome].objetivo = objetivo
+    user_data = {"nome": nome}
+    def obter_input_validado(campo, prompt, is_optional=True):
+        while True:
+            valor = input(prompt)
+            if valor.lower() == 'none' and is_optional:
+                return ""
+            temp_data = user_data.copy()
+            temp_data[campo] = valor
+            try:
+                User(**temp_data)
+                return valor
+            except ValidationError as e:
+                print(f"Erro de validacao para {campo.capitalize()}: {e.errors()[0]['msg']}")
+                if input("Tentar novamente (S/N)? ").lower() != "s":
+                    return ""
+    user_data["email"] = obter_input_validado("email", "Digite seu email: ")
+    user_data["linkedin"] = obter_input_validado("linkedin", "Digite o link do seu linkedin (ou 'none' se não tiver): ")
+    user_data["github"] = obter_input_validado("github", "Digite o link do seu github se houver (ou 'none' se não tiver): ")
+    user_data["celular"] = input("Digite seu numero de celular: ")
+    user_data["estado"] = input("Digite a sigla do seu estado: ")
+    user_data["cidade"] = input("Digite o nome da sua cidade: ")
+    user_data["objetivo"] = input("Digite uma frase como seu objetivo profissional: ")
+    try:
+        novo_user = User(**user_data)
+    except ValidationError as e:
+        print(f"Erro inesperado na criação de usuário: {e}")
+        return None
+    
+    dados[nome] = novo_user
     
     # --- Adicionar Formações ---
     while True:
-        if add_formacao(dados[nome]):
+        if add_formacao(novo_user):
             while True: 
                 check = input("Quer adicionar mais formações (S/N)? ").lower()
                 if check in ['s', 'n']:
@@ -185,7 +187,7 @@ def adicionar_user(dados): # retorna user
             
     # --- Adicionar Competências ---
     while True:
-        if add_competencias(dados[nome]):
+        if add_competencias(novo_user):
             while True: 
                 check = input("Quer adicionar mais competências (S/N)? ").lower()
                 if check in ['s', 'n']:
@@ -194,57 +196,339 @@ def adicionar_user(dados): # retorna user
             if check == 'n':
                 break
                 
-    dados[nome].experiencias = experiencias_lista(dados[nome])
-    dados[nome].projetos = projetos_lista(dados[nome])
-    dados[nome].certificacoes = certificacoes_lista(dados[nome])
-    dados[nome].idiomas = idiomas_lista_dict(dados[nome]) 
-    disponibilidade = input("Digite o horario da sua disponibilidade (manha/tarde/noite): ")
-    dados[nome].disponibilidade = "Período da " + disponibilidade
+    novo_user.experiencias = experiencias_lista(novo_user)
+    novo_user.projetos = projetos_lista(novo_user)
+    novo_user.certificacoes = certificacoes_lista(novo_user)
+    novo_user.idiomas = idiomas_lista_dict(novo_user) 
+    
+    disponibilidade = input("Digite sua(s) disponibilidade(s) separada(s) por VÍRGULAS (Ex: 'Integral, Finais de Semana'):")
+    novo_user.disponibilidade = disponibilidade.strip()
+
     informacoes_adicionais = input("Digite um paragrafo curto sobre você se quiser (ou 'none' se não): ")
     if informacoes_adicionais != "none":
-        dados[nome].informacoes_adicionais = informacoes_adicionais
+        novo_user.informacoes_adicionais = informacoes_adicionais
     print(f"Usuário '{nome}' adicionado!\n")
-    return dados[nome]
+    return novo_user
 
 # --- Funções de Edição ---
 
-def editar_formacao(user):
+def editar_lista_de_dicionarios(user, nome_campo, nome_exibicao):
+    lista = getattr(user, nome_campo)
     while True:
-        if add_formacao(user):
-            while True: 
-                check = input("Quer adicionar mais formações (S/N)? ").lower()
-                if check in ['s', 'n']:
-                    break
-                print("Erro: Resposta inválida. Por favor, digite 'S' ou 'N'.")
-            if check == 'n':
-                break
+        print(f"\n--- Editando lista de {nome_exibicao} ---")
+        if not lista:
+            print(f"Nenhum item em {nome_exibicao} cadastrado.")
+        else:
+            print(f"Itens Atuais:")
+            for i, item_dict in enumerate(lista):
+                titulo = list(item_dict.keys())[0]
+                descricao = item_dict[titulo]
+                print(f"{i+1}. {titulo}: {descricao[:40]}...")
+        print("\nOpções")
+        print("A. Adicionar Novo Item")
+        if lista:
+            print("E. Editar Item Existente")
+            print("R. Remover Item Existente")
+        print("V. Voltar ao menu de Edição")
+        escolha = input("Escolha uma opção (A/E/R/V): ").upper()
+        if escolha == "V":
+            break
+        elif escolha == "A":
+            titulo = input("Digite o TÍTULO do novo item: ")
+            descricao = input(f"Digite a DESCRIÇÃO para {titulo}: ")
+            lista.append({titulo: descricao})
+            print(f"Item '{titulo}' adicionado.")
+        elif escolha == "E" and lista:
+            try:
+                indice = int(input("Digite o número do item para editar: ")) - 1
+                if 0 <= indice < len(lista):
+                    item_dict = lista[indice]
+                    titulo_antigo = list(item_dict.keys())[0]
+                    novo_titulo = input(f"Novo título (Atual: {titulo_antigo}): ")
+                    nova_descricao = input(f"Nova descrição (Atual: {item_dict[titulo_antigo][:40]}): ")
+                    lista.pop(indice)
+                    lista.insert(indice, {novo_titulo: nova_descricao})
+                    print(f"Item {titulo_antigo} atualizado para {novo_titulo}")
+                else:
+                    print("Número inválido")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+        elif escolha == "R" and lista:
+            try:
+                indice = int(input("Digite o NÚMERO do item para remover: ")) - 1
+                if 0 <= indice < len(lista):
+                    titulo_removido = list(lista[indice].keys())[0]
+                    lista.pop(indice)
+                    print(f"Item '{titulo_removido}' removido com sucesso.")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+        else:
+            print("Opção inválida")
 
-def editar_competencias(user):
+# BUG: só faz adição, falta edição e remocao de formacao e competencias
+
+def editar_formacao(user):
+    lista = user.formacao
     while True:
-        if add_competencias(user):
-            while True: 
-                check = input("Quer adicionar mais competências (S/N)? ").lower()
-                if check in ['s', 'n']:
-                    break
-                print("Erro: Resposta inválida. Por favor, digite 'S' ou 'N'.")
-            if check == 'n':
-                break
+        print("\n--- Editando Formação ---")
+        if not lista:
+            print("Nenhuma formação cadastrada.")
+        else:
+            print("Formações Atuais:")
+            for i, f in enumerate(lista):
+                print(f"{i+1}. {f['tipo']} em {f['onde']} ({f['conclusao']})")
+        print("\nOpções:")
+        print("A. Adicionar Nova Formação")
+        if lista:
+            print("E. Editar Formação Existente")
+            print("R. Remover Formação Existente")
+        print("V. Voltar ao menu de Edição")
+        escolha = input("Escolha uma opção (A/E/R/V): ").upper()
+        if escolha == "V":
+            break
+        elif escolha == "A":
+            add_formacao(user)
+        elif escolha == "E" and lista:
+            try:
+                indice = int(input("Digite o NÚMERO da formação para EDITAR: ")) - 1
+                if 0 <= indice < len(lista):
+                    formacao_selecionada = lista[indice]
+                    print(f"\nEditando {formacao_selecionada['tipo']} (Para deixar o campo sem alterações, apenas aperte ENTER sem escrever nada)")
+                    formacao_selecionada['tipo'] = input(f"Novo nome da formação (Atual: {formacao_selecionada['tipo']})") or formacao_selecionada['tipo']
+                    formacao_selecionada['onde'] = input(f"Nova instituição (Atual: {formacao_selecionada['onde']})") or formacao_selecionada["onde"]
+                    print(f"Status Atual: {formacao_selecionada["conclusao"]}")
+                    if input("Deseja alterar o status e data (S/N)? ").lower() == "s":
+                        concluir = ""
+                        while True:
+                            concluido = input("Novo status: Digite 1 (Concluida) ou 2 (Previsão): ")
+                            if concluido == "1":
+                                concluir = "Concluido em "
+                                break
+                            elif concluido == "2":
+                                concluir = "Previsão de conclusão: "
+                                break
+                            else:
+                                print("Erro: Número inválido. Digite '1' ou 2'.")
+                        data = input("Insira a Nova data de conclusão no formato 'mes/ano': ")
+                        formacao_selecionada['conclusao'] = concluir + data
+                    print(f"Formação '{formacao_selecionada['tipo']}' atualizada.")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+        elif escolha == "R" and lista:
+            try:
+                indice = int(input("Digite o NÚMERO da formação para REMOVER: ")) - 1
+                if 0 <= indice < len(lista):
+                    nome_removido = lista[indice]['tipo']
+                    lista.pop(indice)
+                    print(f"Formação '{nome_removido}' removida com sucesso.")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+        else:
+            print("Opção inválida.")
+    
+def editar_competencias(user):
+    competencias_dict = user.competencias
+    while True:
+        print("\n--- Editando Competências ---")
+        if not competencias_dict:
+            print("Nenhuma competência cadastrada.")
+        else:
+            print("Competencias Atuais:")
+            comp_lista = list(competencias_dict.items())
+            for i, (tipo, comp) in enumerate(comp_lista):
+                if isinstance(comp, list):
+                    valor = ", ".join(comp)
+                    tipo_valor = "(Lista)"
+                else:
+                    valor = comp
+                    tipo_valor = "(Linha Descritiva)"
+                print(f"{i+1}. {tipo} {tipo_valor}: {valor[:50]}...")
+        print("\nOpções:")
+        print("A. Adicionar Nova Categoria")
+        if competencias_dict:
+            print("E. Editar Categoria Existente (Título e/ou Conteúdo)")
+            print("R. Remover Categoria")
+        print("V. Voltar ao menu de Edição")
+        escolha = input("Escolha uma opção (A/E/R/V): ").upper()
+        if escolha == "V":
+            break
+        elif escolha == "A":
+            add_competencias()
+        elif escolha == "E" and competencias_dict:
+            try:
+                indice = int(input("Digite o NÚMERO da categoria para EDITAR: ")) - 1
+                comp_lista = list(competencias_dict.items())
+                if 0 <= indice < len(comp_lista):
+                    tipo_antigo = comp_lista[indice][0]
+                    competencias_obj = competencias_dict[tipo_antigo]
+                    novo_tipo = input(f"Novo nome da Categoria (Atual: {tipo_antigo}, ou Enter para manter): ") or tipo_antigo
+                    while True:
+                        print(f"\nValor atual para {tipo_antigo}: {competencias_obj}")
+                        if isinstance(competencias_obj, list):
+                            print("\n[Edição de LISTA de Conteúdo] Opções:")
+                            print("1. Adicionar item à Lista")
+                            print("2. Editar item existente na Lista")
+                            print("3. Remover item da Lista")
+                            print("4. Substituir por nova Linha Descritiva")
+                            print("V. Voltar ao Menu Principal de Competências")
+                            sub_escolha = input("Escolha (1/2/3/4/V): ").upper()
+                            if sub_escolha == "V":
+                                break
+                            elif sub_escolha == '1': # Adicionar item
+                                novo_item = input("Digite o novo item da lista de {novo_tipo}: ")
+                                competencias_obj.append(novo_item)
+                                print(f"Item '{novo_item}' adicionado.")
+                            elif sub_escolha == '2': # Editar item
+                                print("Itens da Lista:")
+                                for i, item in enumerate(competencias_obj):
+                                    print(f"{i+1}. {item}")
+                                try:
+                                    item_indice = int(input("Número do item para editar: ")) - 1
+                                    if 0 <= item_indice < len(competencias_obj):
+                                        novo_valor = input(f"Novo valor (Atual: {competencias_obj[item_indice]} ou ENTER para não alterar): ") or competencias_obj[item_indice]
+                                        competencias_obj[item_indice] = novo_valor
+                                        print("Item atualizado.")
+                                    else:
+                                        print("Número inválido")
+                                except ValueError:
+                                    print("Entrada inválida.")
+                            elif sub_escolha == '3': # Remover item
+                                print("Itens da Lista:")
+                                for i, item in enumerate(competencias_obj):
+                                    print(f"{i+1}. {item}")
+                                try: 
+                                    item_indice = int(input("Numero do item para remover: ")) - 1
+                                    if 0 <= item_indice < len(competencias_obj):
+                                        item_removido = competencias_obj.pop(item_indice)
+                                        print(f"Item '{item_removido}' removido.")
+                                    else:
+                                        print("Número inválido.")
+                                except ValueError:
+                                    print("Entrada inválida.")
+                            elif sub_escolha == '4': # Substituir por String
+                                competencias_obj = input("Digite a nova LINHA DESCRITIVA (será substituída): ")
+                                print("Conteúdo alterado para Linha Descritiva.")
+                                break # Sai do sub-menu
+                        else: # É uma string (Linha Descritiva)
+                            print("\n[Edição de LINHA DESCRITIVA] Opções:")
+                            print("1. Editar Linha Descritiva")
+                            print("2. Converter para nova Lista")
+                            print("V. Voltar ao Menu Principal de Competências")
+                            sub_escolha = input("Escolha (1/2/V): ").upper()
+                            
+                            if sub_escolha == 'V':
+                                break
+                            elif sub_escolha == '1': # Editar String
+                                competencias_obj = input(f"Nova linha descritiva (Atual: {competencias_obj}, ou Enter para manter): ") or competencias_obj
+                                print("Linha descritiva atualizada.")
+                                break # Sai do sub-menu
+                            elif sub_escolha == '2': # Converter para Lista
+                                competencias_obj = competencias_lista(novo_tipo)
+                                print("Conteúdo alterado para Lista.")
+                                break # Sai do sub-menu
+                    # 2. Atualização do Dicionário (Fora do Sub-menu - sai do while True)
+                    if novo_tipo != tipo_antigo:
+                        competencias_dict.pop(tipo_antigo) # Remove chave antiga
+                        competencias_dict[novo_tipo] = competencias_obj # Insere nova chave/valor
+                    else:
+                        competencias_dict[tipo_antigo] = competencias_obj # Mantém a chave, atualiza o valor
+                        
+                    print(f"Categoria '{tipo_antigo}' atualizada para '{novo_tipo}'.")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+                
+        elif escolha == 'R' and competencias_dict:
+            try:
+                indice = int(input("Digite o NÚMERO da categoria para REMOVER: ")) - 1
+                comp_lista = list(competencias_dict.keys())
+                
+                if 0 <= indice < len(comp_lista):
+                    tipo_removido = comp_lista[indice]
+                    competencias_dict.pop(tipo_removido)
+                    print(f"Categoria '{tipo_removido}' removida com sucesso.")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+        
+        else:
+            print("Opção inválida.")
+
 
 def editar_experiencias(user):
-    # ATENÇÃO: Se for usar essa função, ela **substitui** a lista inteira!
-    user.experiencias = experiencias_lista(user)
+    editar_lista_de_dicionarios(user, "experiencias", "Experiências")
 
 def editar_projetos(user):
-    # ATENÇÃO: Se for usar essa função, ela **substitui** a lista inteira!
-    user.projetos = projetos_lista(user)
+    editar_lista_de_dicionarios(user, "projetos", "Projetos")
 
 def editar_certificacoes(user):
-    # ATENÇÃO: Se for usar essa função, ela **substitui** a lista inteira!
-    user.certificacoes = certificacoes_lista(user)
+    editar_lista_de_dicionarios(user, "certificacoes", "Certificações")
 
 def editar_idiomas(user):
-    # ATENÇÃO: Essa função **substitui** o dicionário inteiro de idiomas!
-    user.idiomas = idiomas_lista_dict(user)
+    idiomas_dict = user.idiomas
+    while True:
+        print("\n--- Editando Idiomas ---")
+        if not idiomas_dict:
+            print("Nenhum idioma cadastrado.")
+        else:
+            print("Idiomas Atuais:")
+            idiomas_lista = list(idiomas_dict.items())
+            for i, (lingua, nivel) in enumerate(idiomas_lista):
+                print(f"{i+1}. {lingua}: {nivel}")
+        print("\nOpções:")
+        print("A. Adicionar Novo Idioma")
+        if idiomas_dict:
+            print("E. Editar Nivel de um Idioma Existente")
+            print("R. Remover Idioma")
+        print("V. Voltar ao menu de Edição")
+        escolha = input("Escolha uma opção (A/E/R/V): ").upper()
+        if escolha == "V":
+            break
+        elif escolha == "A":
+            lingua_nova = input("Digite o nome do NOVO idioma: ")
+            if lingua_nova in idiomas_dict:
+                print(f"Idioma '{lingua_nova}' já existe. Use a opção 'E' para editar o nível.")
+                continue
+            nivel_novo = input(f"Digite o nível de fluência para {lingua_nova}: ")
+            idiomas_dict[lingua_nova] = nivel_novo
+            print(f"Idioma '{lingua_nova}' adicionado.")
+        elif escolha == "E" and idiomas_dict:
+            try:
+                indice = int(input("Digite o NÚMERO do idioma para EDITAR o nível: ")) - 1
+                idiomas_lista = list(idiomas_dict.items())
+                if 0 <= indice < len(idiomas_lista):
+                    lingua_selecionada = idiomas_lista[indice][0]
+                    nivel_antigo = idiomas_dict[lingua_selecionada]
+                    novo_nivel = input(f"Novo nível de fluência (Atual: {nivel_antigo}): ")
+                    idiomas_dict[lingua_selecionada] = novo_nivel
+                    print(f"Nivel de '{lingua_selecionada}' atualizado para {novo_nivel}")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+        elif escolha == "R" and idiomas_dict:
+            try:
+                indice = int(input("Digite o NÚMERO do idioma para REMOVER: ")) - 1
+                idiomas_lista = list(idiomas_dict.keys())
+                if 0 <= indice < len(idiomas_lista):
+                    lingua_removida = idiomas_lista[indice]
+                    idiomas_dict.pop(lingua_removida)
+                    print(f"Idioma '{lingua_removida}' removido com sucesso.")
+                else:
+                    print("Número inválido.")
+            except ValueError:
+                print("Entrada inválida. Digite um número.")
+        else:
+            print("Opção inválida.")
+
 
 def editar_nome(user, dados):
     nome_antigo = user.nome
@@ -258,31 +542,83 @@ def editar_nome(user, dados):
         print(f"Nome atualizado para {novo_nome}")
 
 def editar_email(user):
-    email = input("Digite seu email: ")
-    user.email = email
+    while True:
+        email = input("Email atual ({user.email}). Digite o novo email: ")
+        try:
+            User(nome = user.nome, email=email)
+            user.email = email
+            print("Email atualizado e validado com sucesso!")
+            break
+        except ValidationError as e:
+            print("Erro de validação: O formato do email é inválido.")
+            if input("Tentar novamente (S/N)? ").lower() != "s":
+                break
+
 def editar_linkedin(user):
-    linkedin = input("Digite o link do seu linkedin (ou 'none' se não tiver): ")
-    if linkedin != "none":
-        user.linkedin = linkedin
+    while True:
+        linkedin = input(f"LinkedIn atual ({user.linkedin or 'N/A'}). Digite o novo link (ou 'none'): ")
+        if linkedin.lower() == "none":
+            user.linkedin = "" # Limpa o campo
+            print("LinkedIn removido.")
+            break
+        try:
+            # Pydantic valida o formato da URL aqui (HttpUrl)
+            User(nome=user.nome, linkedin=linkedin) 
+            user.linkedin = linkedin
+            print("LinkedIn atualizado e validado com sucesso!")
+            break
+        except ValidationError:
+            print("Erro de Validação: A URL do LinkedIn é inválida (deve começar com http:// ou https://).")
+            if input("Tentar novamente (S/N)? ").lower() != 's':
+                break
+
 def editar_github(user):
-    github = input("Digite o link do seu github se houver (ou 'none' se não tiver): ")
-    if github != "none":
-        user.github = github
+    while True:
+        github = input(f"GitHub atual ({user.github or 'N/A'}). Digite o novo link (ou 'none'): ")
+        if github.lower() == "none":
+            user.github = ""
+            print("GitHub removido.")
+            break
+        try:
+            # Pydantic valida o formato da URL aqui (HttpUrl)
+            User(nome=user.nome, github=github) 
+            user.github = github
+            print("GitHub atualizado e validado com sucesso!")
+            break
+        except ValidationError:
+            print("❌ Erro de Validação: A URL do GitHub é inválida (deve começar com http:// ou https://).")
+            if input("Tentar novamente (S/N)? ").lower() != 's':
+                break
+
 def editar_celular(user):
     celular = input("Digite seu numero de celular: ")
     user.celular = celular
+
 def editar_estado(user):
     estado = input("Digite a sigla do seu estado: ")
     user.estado = estado
+
 def editar_cidade(user):
     cidade = input("Digite o nome da sua cidade: ")
     user.cidade = cidade
+
 def editar_objetivo(user):
     objetivo = input("Digite uma frase como seu objetivo profissional: ")
     user.objetivo = objetivo
+
 def editar_disponibilidade(user):
-    disponibilidade = input("Digite o horario da sua disponibilidade (manha/tarde/noite): ")
-    user.disponibilidade = "Período da " + disponibilidade
+    print("\n--- Editando Disponibilidade ---")
+    print("Opções sugeridas: 1. Integral, 2. Manhã, 3. Tarde, 4. Noite, 5. Finais de Semana")
+    
+    nova_disponibilidade = input("Digite sua(s) disponibilidade(s) separada(s) por VÍRGULAS (Ex: 'Integral, Finais de Semana'): ")
+    
+    # Se a entrada não for vazia, atualiza.
+    if nova_disponibilidade.strip():
+        user.disponibilidade = nova_disponibilidade.strip()
+        print(f"Disponibilidade atualizada para: {user.disponibilidade}")
+    else:
+        print("Disponibilidade não alterada.")
+
 def editar_informacoes_adicionais(user):
     informacoes_adicionais = input("Digite o link do seu github se houver (ou 'none' se não tiver): ")
     if informacoes_adicionais != "none":
@@ -319,10 +655,10 @@ def editar_usuario(dados, user):
         print("8. Objetivo")
         print("9. Formação")
         print("10. Competências")
-        print("11. Experiências (Substituir Lista)")
-        print("12. Projetos (Substituir Lista)")
-        print("13. Certificações (Substituir Lista)")
-        print("14. Idiomas (Substituir Lista/Dicionário)")
+        print("11. Experiências")
+        print("12. Projetos")
+        print("13. Certificações")
+        print("14. Idiomas")
         print("15. Disponibilidade")
         print("16. Informações Adicionais")
         print("0. Voltar ao Menu Principal")
@@ -504,9 +840,13 @@ def carregar_dados():
                 dados_lista = json.load(f)
                 dados = {}
                 for user_dict in dados_lista:
-                    user_obj = User.from_dict(user_dict) 
-                    dados[user_obj.nome] = user_obj 
-                print("Dados carregados do arquivo!")
+                    try:
+                        user_obj = User.model_validate(user_dict) 
+                        dados[user_obj.nome] = user_obj
+                    except ValidationError as e:
+                        print(f"Aviso: Dados de usuário inválidos encontrados e ignorados: {e}")
+                if dados:
+                    print("Dados carregados do arquivo!")
                 return dados
         except Exception as e:
             print(f"Erro ao carregar o arquivo {ARQUIVO_JSON}: {e}")
@@ -514,7 +854,7 @@ def carregar_dados():
     return{}
 
 def salvar_dados(dados):
-    dados_para_salvar = [user.to_dict() for user in dados.values()]
+    dados_para_salvar = [user.model_dump() for user in dados.values()]
     try:
         with open(ARQUIVO_JSON, 'w') as f:
             json.dump(dados_para_salvar, f, indent=4, ensure_ascii=False)
