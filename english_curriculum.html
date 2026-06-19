@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume - Alex Marques</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        
+        /* Global application of font and base color */
+        body, p, span, div, h1, h2, ul, li, strong, a {
+            font-family: 'Roboto', sans-serif !important;
+            color: #000000;
+        }
+        
+        body {
+            font-size: 10pt;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 210mm; /* A4 Width */
+            min-height: 297mm; /* A4 Height */
+            margin: 0 auto;
+            padding: 15mm; 
+            box-sizing: border-box;
+            position: relative; /* Required for dynamic photo placement */
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centers the header text */
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            border-bottom: 1.5px solid #000000;
+            min-height: 100px;
+        }
+
+        .header-content {
+            text-align: center;
+            flex: 1;
+        }
+
+        /* Profile Picture Style */
+        .profile-pic {
+            width: 85px; 
+            height: 110px; 
+            object-fit: cover;
+            border: 1px solid #000000;
+            position: absolute;
+            left: 18mm; 
+            top: 10mm;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .header p {
+            margin: 4px 0;
+            font-size: 0.95em;
+        }
+
+        .header a {
+            text-decoration: none;
+        }
+
+        h2 {
+            font-size: 1.1em;
+            font-weight: 700;
+            border-bottom: 1px solid #000000;
+            padding-bottom: 4px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            page-break-after: avoid;
+        }
+
+        .section {
+            margin-bottom: 15px;
+            page-break-inside: auto;
+        }
+
+        .section p {
+            margin: 0 0 8px 0;
+        }
+
+        .item {
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+        }
+
+        .item-title-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        /* Dark gray subtitles for better visual hierarchy */
+        .item-subheader {
+            font-size: 0.95em;
+            font-style: italic;
+            margin-bottom: 6px;
+            color: #555555 !important;
+        }
+
+        .item-bullet-list {
+            margin: 4px 0 8px 0;
+            padding-left: 20px;
+        }
+
+        .item-bullet-list li {
+            margin-bottom: 4px;
+            font-size: 0.95em;
+        }
+
+        .skills-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .skills-list li {
+            display: flex;            /* Transforms the item into a flexbox */
+            align-items: flex-start;  /* Ensures the text aligns by the top */
+            margin-bottom: 6px;
+            font-size: 0.95em;
+        }
+
+        .skills-list strong {
+            flex-shrink: 0;           /* Prevents the title column from squishing */
+            width: 250px;             /* Custom width set to avoid description wrapping issues */
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <img src="profile.jpeg" alt="Alex Marques" class="profile-pic">
+
+
+        <div class="header">
+            <div class="header-content">
+                <h1>Alex de Castro Mendes Marques</h1>
+                <p>alex@recriarsistemas.com.br | +55 (31) 99199-8970 | Belo Horizonte - MG</p>
+                <p>
+                    <a href="https://www.linkedin.com/in/alex-marques-7742b429a">linkedin.com/in/alex-marques-7742b429a</a> |
+                    <a href="https://github.com/AlexMarques00">github.com/AlexMarques00</a>
+                </p>
+            </div>
+        </div>
+
+
+        <div class="section">
+            <h2>OBJECTIVE</h2>
+            <p>Internship as a Backend Developer or in the Database area, applying knowledge in programming, data structures, and software engineering, with a focus on efficient and secure development.</p>
+        </div>
+
+
+        <div class="section">
+            <h2>ACADEMIC BACKGROUND</h2>
+            
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Bachelor of Science in Computer Science</span>
+                    <span>Expected Graduation: December 2028</span>
+                </div>
+                <div class="item-subheader">PUC Minas - Pontifical Catholic University of Minas Gerais</div>
+            </div>
+        </div>
+
+
+        <div class="section">
+            <h2>TECHNICAL SKILLS</h2>
+            
+            <ul class="skills-list">
+                <li><strong>Languages:</strong> Java, Python, C, C#, Lua, Delphi</li>
+                <li><strong>Databases:</strong> MySQL</li>
+                <li><strong>Tools:</strong> Git, Microsoft Office Suite (Word, Excel, PowerPoint)</li>
+                <li><strong>Concepts:</strong> Programming logic, data structures, object-oriented programming (OOP), version control</li>
+            </ul>
+        </div>
+
+
+        <div class="section">
+            <h2>PROFESSIONAL / ACADEMIC EXPERIENCE</h2>
+            
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Algorithms and Data Structures II Teaching Assistant</span>
+                    <span>2025</span>
+                </div>
+                <div class="item-subheader">PUC Minas</div>
+                <ul class="item-bullet-list">
+                    <li>Provided guidance and technical support to undergraduate students in developing algorithmic logic and implementing advanced data structures.</li>
+                    <li>Assisted with code debugging, troubleshooting, and code complexity analysis for backend programming languages.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Integrated Project: Mobile Development Teaching Assistant</span>
+                    <span>2025</span>
+                </div>
+                <div class="item-subheader">PUC Minas</div>
+                <ul class="item-bullet-list">
+                    <li>Supported students with technical development on their projects, aiding in structural architecture and solution integration.</li>
+                    <li>Reviewed programming logic and essential connectivity concepts required for integrated applications.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Calculus I Teaching Assistant</span>
+                    <span>2023</span>
+                </div>
+                <div class="item-subheader">PUC Minas</div>
+                <ul class="item-bullet-list">
+                    <li>Conducted problem-solving sessions and tutoring for complex mathematical problems, strengthening structured logical reasoning applicable to software engineering.</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="section">
+            <h2>SOFTWARE DEVELOPMENT PROJECTS</h2>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Game Automation and Scripting System</span>
+                </div>
+                <div class="item-subheader">Language: Python | GitHub: farmer-was-replaced-scripts</div>
+                <ul class="item-bullet-list">
+                    <li>Engineered Python scripts designed for logical automation and state-based decision-making within The Farmer Was Replaced game environment.</li>
+                    <li>Practiced control-loop design, script execution optimization, and the building of functional developer tooling for sequential task automation.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Task Management Application (ToDo List CLI)</span>
+                </div>
+                <div class="item-subheader">Language: Python | GitHub: ToDo-List</div>
+                <ul class="item-bullet-list">
+                    <li>Built a terminal-based command-line interface (CLI) application for managing day-to-day tasks and notes.</li>
+                    <li>Focused on code quality and maintainability by applying Clean Architecture principles, function modularization, and structured data handling.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Home Security System with Arduino and Database Integration</span>
+                </div>
+                <div class="item-subheader">Technologies: Arduino, C++, MySQL Database</div>
+                <ul class="item-bullet-list">
+                    <li>Developed a home automation ecosystem utilizing motion sensors and real-time image capture mechanisms.</li>
+                    <li>Responsible for building the core data capture logic, handling sensor inputs, and establishing MySQL database communication for robust security log persistence.</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="section">
+            <h2>EVENTS AND EXTRA-CURRICULAR ACTIVITIES</h2>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Global Hack Week: Hacking for Good</span>
+                    <span>June/2026</span>
+                </div>
+                <div class="item-subheader">Major League Hacking (MLH)</div>
+                <ul class="item-bullet-list">
+                    <li>Participated in technical workshops and a hackathon focused on developing technology solutions for social good.</li>
+                    <li>Practiced agile software development and collaborated within a global community of developers.</li>
+                    <li>Advanced practice of English comprehension and technical communication during activities within a global community.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Python Sudeste Conference</span>
+                    <span>2025</span>
+                </div>
+                <div class="item-subheader">Associação Python Brasil (APyB)</div>
+                <ul class="item-bullet-list">
+                    <li>Attended lectures and technical discussions regarding the Python ecosystem, covering programming best practices, backend development, and new technology trends.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>United Nations Model Simulations & International Organizations</span>
+                    <span>2018 – 2021</span>
+                </div>
+                <div class="item-subheader">Participations: SIS (2021, 2019), Jovem ONU Simulation (2019), CIMUN (2019), CSCJMUN (2018)</div>
+                <ul class="item-bullet-list">
+                    <li>Consolidated experience in intercollegiate diplomatic committees modeled after United Nations frameworks, serving in strategic roles such as Delegate of Nations, Crisis/Boycott Committees, and International Press Journalist.</li>
+                    <li>Developed strong public speaking and communication skills, logical reasoning under pressure, persuasion, and emotional intelligence in negotiations. Practical experience in conflict resolution, fast-paced decision making, and summarizing complex information for drafting reports and agreements.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Innovation Camp – Junior Achievement Brazil</span>
+                    <span>July/2019</span>
+                </div>
+                <div class="item-subheader">Colegio Sagrado Coracao de Jesus / JA Brazil</div>
+                <ul class="item-bullet-list">
+                    <li>Intensive tech-innovation and entrepreneurship boot camp. Worked collaboratively within a team to map market problems, engineer viable software-product ideas, and pitch structured proposals.</li>
+                    <li>Guided by executive mentorship focused on leadership architectures, market validation frameworks, and professional career development.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>CogPlanner Course: Soft Skills and Planning Architectures</span>
+                    <span>June/2019</span>
+                </div>
+                <div class="item-subheader">Colegio Sagrado Coracao de Jesus | Workload: 17h</div>
+                <ul class="item-bullet-list">
+                    <li>Practical training focusing on strategic planning, cognitive behavioral agility, and task optimization routes aimed at accelerating computer science engineering workloads.</li>
+                    <li>Specialized course led by a senior professional in educational psychology and behavioral learning focus.</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="section">
+            <h2>CERTIFICATIONS AND ACHIEVEMENTS</h2>
+            
+            <ul class="skills-list">
+                <li><strong>OBMEP (Brazilian Mathematics Olympiad):</strong> Honorable Mention (2017)</li>
+                <li><strong>Math Kangaroo:</strong> Silver Medal (2016, 2017), Bronze Medal (2022)</li>
+            </ul>
+        </div>
+
+
+        <div class="section">
+            <h2>LANGUAGES</h2>
+            
+            <ul class="skills-list">
+                <li><strong>English:</strong> Fluent (B2 Level - Cambridge FCE Certificate)</li>
+                <li><strong>Japanese:</strong> Intermediate</li>
+                <li><strong>French:</strong> Basic</li>
+            </ul>
+        </div>
+
+
+        <div class="section">
+            <h2>ADDITIONAL INFORMATION</h2>
+            <p><strong>Internship Availability:</strong> Afternoon shift.</p>
+            <p>Proactive professional focused on building robust backend software, designing efficient relational databases, and optimizing algorithm processing paths.</p>
+        </div>
+
+    </div>
+</body>
+</html>

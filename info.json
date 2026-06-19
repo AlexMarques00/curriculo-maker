@@ -1,1 +1,50 @@
-[]
+[
+    {
+        "nome": "alex",
+        "email": "alex@gmail.com",
+        "linkedin": "",
+        "github": "",
+        "celular": "(xx) xxxxx-xxxx",
+        "estado": "MG",
+        "cidade": "Belo Horizonte",
+        "objetivo": "Ter muita grana",
+        "formacao": [
+            {
+                "tipo": "Ciencia da computacao",
+                "onde": "puc minas",
+                "conclusao": "ago/2028"
+            }
+        ],
+        "competencias": {
+            "Linguagens de programacao": [
+                "python",
+                "java"
+            ],
+            "pacote office": "sei mexer em google sheets e apresentacoes"
+        },
+        "experiencias": [
+            {
+                "estagio": "nunca fiz mais isso eh um exemplo"
+            }
+        ],
+        "projetos": [
+            {
+                "curriculo maker": "esse codigo em python q faz curriculos"
+            }
+        ],
+        "certificacoes": [
+            {
+                "OBMEP": "mensao honrosa"
+            },
+            {
+                "canguru sem fronteiras": "2 medalhas de prata e 1 de bronze"
+            }
+        ],
+        "idiomas": [
+            "ingles",
+            "frances basico"
+        ],
+        "disponibilidade": "Período da tarde/noite",
+        "informacoes_adicionais": "eu sou muito responsavel e tals"
+    }
+]

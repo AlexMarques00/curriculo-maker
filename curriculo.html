@@ -1,128 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Currículo - Alex Marques</title>
     <meta charset="UTF-8">
+    <title>Currículo - Alex Marques</title>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        
+        /* Aplicação global da fonte e da cor padrão */
+        body, p, span, div, h1, h2, ul, li, strong, a {
+            font-family: 'Roboto', sans-serif !important;
+            color: #000000;
+        }
+        
         body {
-            font-family: 'Roboto', sans-serif;
             font-size: 10pt;
-            line-height: 1.4;
-            color: #333;
+            line-height: 1.5;
             margin: 0;
             padding: 0;
             background-color: #fff;
         }
+
         .container {
-            max-width: 210mm; /* Largura de um A4 */
-            min-height: 297mm; /* Altura de um A4 */
+            max-width: 210mm; /* Largura A4 */
+            min-height: 297mm; /* Altura A4 */
             margin: 0 auto;
-            padding: 12mm; /* Margens da página */
+            padding: 15mm; 
             box-sizing: border-box;
+            position: relative; /* Necessário para posicionar a foto dinamicamente */
         }
+
         .header {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centraliza o texto do cabeçalho */
             padding-bottom: 8px;
             margin-bottom: 15px;
-            border-bottom: 1.5px solid #333;
+            border-bottom: 1.5px solid #000000;
+            min-height: 100px;
         }
+
+        .header-content {
+            text-align: center;
+            flex: 1;
+        }
+
+        /* Estilo da Foto de Perfil */
+        .profile-pic {
+            width: 85px; 
+            height: 110px; 
+            object-fit: cover;
+            border: 1px solid #000000;
+            position: absolute;
+            left: 18mm; 
+            top: 10mm;
+        }
+
         .header h1 {
             margin: 0;
             font-size: 1.8em;
             font-weight: 700;
         }
+
         .header p {
-            margin: 2px 0;
-            font-size: 0.9em;
+            margin: 4px 0;
+            font-size: 0.95em;
         }
+
         .header a {
-            color: #0073b1;
             text-decoration: none;
         }
+
         h2 {
             font-size: 1.1em;
             font-weight: 700;
-            color: #333;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #000000;
             padding-bottom: 4px;
-            margin-top: 15px;
+            margin-top: 20px;
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            page-break-after: avoid;
         }
+
         .section {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            page-break-inside: auto;
         }
-        .section p, .section ul {
-            margin: 0;
-            padding: 0;
+
+        .section p {
+            margin: 0 0 8px 0;
         }
-        ul {
-            list-style-type: none;
-        }
+
         .item {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
         }
-        .item-header {
+
+        .item-title-row {
+            display: flex;
+            justify-content: space-between;
             font-weight: 700;
+            margin-bottom: 2px;
         }
+
+        /* Subtítulos em cinza escuro para melhor hierarquia visual */
         .item-subheader {
-            color: #555;
+            font-size: 0.95em;
+            font-style: italic;
+            margin-bottom: 6px;
+            color: #555555 !important;
+        }
+
+        .item-bullet-list {
+            margin: 4px 0 8px 0;
+            padding-left: 20px;
+        }
+
+        .item-bullet-list li {
+            margin-bottom: 4px;
             font-size: 0.95em;
         }
-        .item-content {
-            font-size: 0.95em;
-            margin-top: 2px;
-            padding-left: 10px;
-        }
+
         .skills-list {
             list-style-type: none;
             padding: 0;
+            margin: 0;
         }
+
         .skills-list li {
-            margin-bottom: 4px;
+            display: flex;            /* Transforma o item em flexbox */
+            align-items: flex-start;  /* Garante que o texto fique alinhado pelo topo */
+            margin-bottom: 6px;
+            font-size: 0.95em;
         }
+
         .skills-list strong {
-            display: inline-block;
-            width: 170px;
+            flex-shrink: 0;           /* Impede que a coluna do título esmague */
+            width: 250px;             /* Defina aqui a largura que você quiser para a primeira coluna */
             font-weight: 700;
-        }
-        .experience-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px 20px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
+
+        <img src="profile.jpeg" alt="Alex Marques" class="profile-pic">
+
+
         <div class="header">
-            <h1>Alex de Castro Mendes Marques</h1>
-            <p>
-                alex@recriarsistemas.com.br | +55 (31) 99199-8970 | Belo Horizonte - MG
-            </p>
-            <p>
-                <a href="https://www.linkedin.com/in/alex-marques-7742b429a">linkedin.com/in/alex-marques-7742b429a</a> |
-                <a href="https://github.com/AlexMarques00">github.com/AlexMarques00</a>
-            </p>
+            <div class="header-content">
+                <h1>Alex de Castro Mendes Marques</h1>
+                <p>alex@recriarsistemas.com.br | +55 (31) 99199-8970 | Belo Horizonte - MG</p>
+                <p>
+                    <a href="https://www.linkedin.com/in/alex-marques-7742b429a">linkedin.com/in/alex-marques-7742b429a</a> |
+                    <a href="https://github.com/AlexMarques00">github.com/AlexMarques00</a>
+                </p>
+            </div>
         </div>
+
 
         <div class="section">
             <h2>OBJETIVO</h2>
             <p>Estágio como Desenvolvedor Backend ou na área de Banco de Dados, aplicando conhecimentos em programação, estrutura de dados e engenharia de software, com foco em desenvolvimento eficiente e seguro.</p>
         </div>
 
+
         <div class="section">
             <h2>FORMAÇÃO</h2>
+            
             <div class="item">
-                <p class="item-header">Bacharelado em Ciências da Computação</p>
-                <p class="item-subheader">PUC Minas - Pontifícia Universidade Católica de Minas Gerais | Previsão de conclusão: Agosto/2028</p>
+                <div class="item-title-row">
+                    <span>Bacharelado em Ciências da Computação</span>
+                    <span>Previsão: Dezembro/2028</span>
+                </div>
+                <div class="item-subheader">PUC Minas - Pontifícia Universidade Católica de Minas Gerais</div>
             </div>
         </div>
 
+
         <div class="section">
             <h2>COMPETÊNCIAS TÉCNICAS</h2>
+            
             <ul class="skills-list">
                 <li><strong>Linguagens:</strong> Java, Python, C, C#, Lua, Delphi</li>
                 <li><strong>Banco de Dados:</strong> MySQL</li>
@@ -131,59 +191,177 @@
             </ul>
         </div>
 
+
         <div class="section">
-            <h2>EXPERIÊNCIA</h2>
-            <div class="experience-grid">
-                <div class="item">
-                    <p class="item-header">Monitor de Cálculo I</p>
-                    <p class="item-subheader">PUC Minas (2023)</p>
+            <h2>EXPERIÊNCIA PROFISSIONAL / ACADÊMICA</h2>
+            
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Monitor de Algoritmo e Estrutura de Dados II</span>
+                    <span>2025</span>
                 </div>
-                <div class="item">
-                    <p class="item-header">Monitor de Algoritimo e Estrutura de Dados II</p>
-                    <p class="item-subheader">PUC Minas (2025)</p>
+                <div class="item-subheader">PUC Minas</div>
+                <ul class="item-bullet-list">
+                    <li>Orientação e suporte a estudantes universitários no desenvolvimento de lógica algorítmica e implementação de estruturas de dados avançadas.</li>
+                    <li>Auxílio na depuração e análise de complexidade de código em linguagens de programação backend.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Monitor de Projeto Integrado: Desenvolvimento Móvel</span>
+                    <span>2025</span>
                 </div>
-                <div class="item">
-                    <p class="item-header">Monitor de Projeto Integrado: Desenvolvimento Móvel</p>
-                    <p class="item-subheader">PUC Minas (2025)</p>
+                <div class="item-subheader">PUC Minas</div>
+                <ul class="item-bullet-list">
+                    <li>Apoio no desenvolvimento técnico dos projetos de alunos, auxiliando na arquitetura e integração de soluções.</li>
+                    <li>Revisão de lógicas de programação e conceitos de conectividade essenciais para aplicações integradas.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Monitor de Cálculo I</span>
+                    <span>2023</span>
                 </div>
-                <div class="item">
-                    <p class="item-header"></p> <!-- Espaço reservado para futuras experiências -->
-                    <p class="item-subheader"></p> 
+                <div class="item-subheader">PUC Minas</div>
+                <ul class="item-bullet-list">
+                    <li>Condução de plantões de dúvidas para resolução de problemas matemáticos complexos, exercitando raciocínio lógico estruturado aplicável à engenharia de software.</li>
+                </ul>
             </div>
         </div>
 
+
         <div class="section">
-            <h2>PROJETOS</h2>
+            <h2>PROJETOS DE DESENVOLVIMENTO DE SOFTWARE</h2>
+
             <div class="item">
-                <p class="item-header">Sistema de Segurança Residencial com Arduino e Banco de Dados</p>
-                <div class="item-content">
-                    <p>Projeto de automação residencial com sensores de câmera e proximidade, integrado a um banco de dados para registrar tentativas de acesso. Responsável pela lógica de captura, armazenamento e visualização das informações.</p>
+                <div class="item-title-row">
+                    <span>Sistema de Automação e Scripting de Jogos</span>
                 </div>
+                <div class="item-subheader">Linguagem: Python | GitHub: farmer-was-replaced-scripts</div>
+                <ul class="item-bullet-list">
+                    <li>Criação de <i>scripts</i> em Python projetados para automação de lógica e tomadas de decisão dentro do jogo The Farmer Was Replaced.</li>
+                    <li>Aplicação prática de conceitos de loop de controle, otimização de execução de código e desenvolvimento de ferramentas auxiliares (<i>developer tooling</i>) para automação de tarefas sequenciais.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Aplicação de Gerenciamento de Tarefas (ToDo List CLI)</span>
+                </div>
+                <div class="item-subheader">Linguagem: Python | GitHub: ToDo-List</div>
+                <ul class="item-bullet-list">
+                    <li>Desenvolvimento de uma aplicação baseada em terminal (<i>CLI</i>) para gerenciamento de tarefas cotidianas e notas.</li>
+                    <li>Foco na legibilidade do código através da aplicação prática de <i>Clean Architecture</i>, modularização de funções e manipulação estruturada de entrada e saída de dados.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Sistema de Segurança Residencial com Arduino e Banco de Dados</span>
+                </div>
+                <div class="item-subheader">Tecnologias: Arduino, C++, Banco de Dados MySQL</div>
+                <ul class="item-bullet-list">
+                    <li>Desenvolvimento de um ecossistema de automação residencial utilizando sensores de presença e captura de imagem.</li>
+                    <li>Responsável pelo desenvolvimento da lógica de captura, tratamento dos dados de sensores e modelagem/comunicação com o banco de dados MySQL para persistência de logs de acesso de segurança.</li>
+                </ul>
             </div>
         </div>
+
+
+        <div class="section">
+            <h2>EVENTOS E ATIVIDADES EXTRACURRICULARES</h2>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Global Hack Week: Hacking for Good</span>
+                    <span>Junho/2026</span>
+                </div>
+                <div class="item-subheader">Major League Hacking (MLH)</div>
+                <ul class="item-bullet-list">
+                    <li>Participação em workshops técnicos e maratona de desenvolvimento voltada para a criação de soluções tecnológicas de impacto social.</li>
+                    <li>Prática no desenvolvimento ágil de software e colaboração em comunidade com desenvolvedores globais.</li>
+                    <li>Prática avançada de compreensão e comunicação técnica em língua inglesa durante as atividades em comunidade global.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Conferência Python Sudeste</span>
+                    <span>2025</span>
+                </div>
+                <div class="item-subheader">Associação Python Brasil (APyB)</div>
+                <ul class="item-bullet-list">
+                    <li>Participação em palestras e discussões técnicas sobre o ecossistema Python, cobrindo boas práticas de programação, desenvolvimento backend e novas tendências tecnológicas.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Modelos de Simulação Diplomática e Organizações Internacionais</span>
+                    <span>2018 – 2021</span>
+                </div>
+                <div class="item-subheader">Participações: SIS (2021, 2019), Simulação Jovem ONU (2019), CIMUN (2019), CSCJMUN (2018)</div>
+                <ul class="item-bullet-list">
+                    <li>Experiência consolidada em comitês diplomáticos intercolegiais baseados no formato das Nações Unidas, atuando em papéis estratégicos como Delegado de Nações, Comitês de Crise/Boicote e Jornalista de Imprensa Internacional.</li>
+                    <li>Aperfeiçoamento da comunicação e oratória, argumentação lógica sob pressão, persuasão e inteligência emocional em negociações. Experiência prática em resolução de conflitos, tomada de decisão rápida e facilidade para analisar e resumir informações na redação de relatórios e acordos.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Innovation Camp – Junior Achievement Brasil</span>
+                    <span>Julho/2019</span>
+                </div>
+                <div class="item-subheader">Colégio Sagrado Coração de Jesus / JA Brasil</div>
+                <ul class="item-bullet-list">
+                    <li>Imersão intensa voltada à inovação tecnológica e ao empreendedorismo. Atuação colaborativa em equipe para mapear problemas reais, idealizar soluções de mercado viáveis e estruturar apresentações em formato de <i>pitch</i>.</li>
+                    <li>Mentoria executiva direcionada ao desenvolvimento de liderança empreendedora, metodologias de <i>design</i> e coaching de carreira.</li>
+                </ul>
+            </div>
+
+            <div class="item">
+                <div class="item-title-row">
+                    <span>Curso CogPlanner: Habilidades Socioemocionais e de Planejamento</span>
+                    <span>Junho/2019</span>
+                </div>
+                <div class="item-subheader">Colégio Sagrado Coração de Jesus</div>
+                <ul class="item-bullet-list">
+                    <li>Desenvolvimento prático focado em planejamento estratégico pessoal, inteligência comportamental e gestão ágil do tempo direcionadas à otimização de rotinas complexas de estudo de engenharia.</li>
+                    <li>Treinamento especializado conduzido por profissional sênior em psicologia comportamental e neurocognição da aprendizagem.</li>
+                </ul>
+            </div>
+        </div>
+
 
         <div class="section">
             <h2>CERTIFICAÇÕES E CONQUISTAS</h2>
-             <ul class="skills-list">
+            
+            <ul class="skills-list">
                 <li><strong>OBMEP:</strong> Menção Honrosa (2017)</li>
                 <li><strong>Canguru Sem Fronteiras:</strong> Medalha de Prata (2016, 2017), Medalha de Bronze (2022)</li>
-                <li><strong>Cursos:</strong> Curso CogPlanner (2019), Innovation Camp (2019)</li>
             </ul>
         </div>
+
 
         <div class="section">
             <h2>IDIOMAS</h2>
+            
             <ul class="skills-list">
-                <li><strong>Inglês:</strong> Fluente (nível B2 - certificado Cambridge FCE)</li>
+                <li><strong>Inglês:</strong> Fluente (Nível B2 - Certificação Cambridge FCE)</li>
                 <li><strong>Japonês:</strong> Intermediário</li>
+                <li><strong>Francês:</strong> Básico</li>
             </ul>
         </div>
 
+
         <div class="section">
             <h2>INFORMAÇÕES ADICIONAIS</h2>
-             <p><strong>Disponibilidade para estágio:</strong> Período da tarde.</p>
-             <p>Perfil proativo e comprometido, com interesse em desenvolvimento backend, bancos de dados e soluções eficientes em software.</p>
+            <p><strong>Disponibilidade para estágio:</strong> Período da tarde.</p>
+            <p>Perfil proativo com foco em desenvolvimento de software backend robusto, modelagem eficiente de bancos de dados relacionais e otimização de algoritmos.</p>
         </div>
+
     </div>
 </body>
 </html>
